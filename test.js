@@ -3,7 +3,7 @@ var lands = {
     "crs" : {
       "type" : "name",
       "properties" : {
-        "name" : "cession"
+        "name" : "EPSG:4326"
       }
     },
     "features" : [
