@@ -10,7 +10,7 @@
     </head>
  
     <body>
-        <h1> United States Land Cessions </h1>
+        <h1> United States Land Cessions 2 </h1>
         <div id="mapid"></div>
         <script>
         var map = L.map('mapid').setView([35.50, -80.00], 7);
@@ -19,7 +19,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
  
-        L.geoJSON(test).addTo(map);
+        L.geoJSON(lands).addTo(map);
  
             var myStyle = {
                 // "color": "#ff7800",

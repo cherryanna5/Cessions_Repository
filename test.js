@@ -1,4 +1,4 @@
-var gages = {
+var lands = {
     "type" : "FeatureCollection",
     "crs" : {
       "type" : "name",
