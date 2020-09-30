@@ -1,32 +1,38 @@
 <html>
-    <head>
-        <title>Cessions</title>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
-        <link rel="stylesheet" href="style.css"/>
-        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
-        <script src='test.js'></script>
-        <script src='111.geojson'></script>
-        
-         
-    </head>
- 
-    <body>
-        <h1> United States Land Cessions 2 </h1>
-        <div id="mapid"></div>
-        <script>
+
+<head>
+    <title>Cessions</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+    <script src='test.js'></script>
+    <script src='111.geojson'></script>
+
+
+</head>
+
+<body>
+    <h1> United States Land Cessions 2 </h1>
+    <div id="mapid"></div>
+    <script>
         var map = L.map('mapid').setView([35.00, -80.00], 4);
         var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
- 
-        L.geoJSON(111).addTo(map);
- 
-            var myStyle = {
-                // "color": "#ff7800",
-                "weight": 5,
-                "opacity": 0.65
-            };
-</script>
+        }).addTo(map);
+
+        L.geoJSON(ID_111).addTo(map);
+
+        var myStyle = {
+            "color": "#ff7800",
+            "weight": 5,
+            "opacity": 0.65
+        };
+    </script>
 </body>
+
 </html>
