@@ -64,15 +64,15 @@
             var popupcontent = "This is a Cession Parcel from the Morriel Act";
             if (feature.properties && feature.properties.popupcontent) {
                 popupcontent += feature.properties.popupcontent;
-                
+
             }
             layer.bindPopup(popupcontent);
         }
 
         L.geoJson(points, {
-            style: funtion (feature) {
-                return feature.properties && feature.properties.style;
-            },
+            style: funtion(feature) {
+            return feature.properties && feature.properties.style;
+        },
 
             onEachFeature: onEachFeature,
 
@@ -86,12 +86,25 @@
                 });
             }
         }).addTo(map);
-            
-            
-            
-            
-            
-            
+
+        function highlightFeature(e) {
+            var layer = e.target;
+
+            layer.setStyle({
+                weight: 5,
+                color: '#666',
+                dashArray: '',
+                fillOpacity: 0.7
+            });
+
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
+        }
+
+
+
+
 
         // L.control.layers(overlayMaps).addTo(map);
 
