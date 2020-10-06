@@ -21,7 +21,12 @@
     <div id="mapid"></div>
     <script>
         var map = L.map('mapid').setView([35.00, -80.00], 4);
-        
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            layers: [Cessions, cession_points]
+        }).addTo(map);
+
         var CessionGroup = L.layerGroup();
         var CessionPoints = L.layerGroup();
 
@@ -45,12 +50,7 @@
             style: PtStyle
         }).addto(map);
         
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            layers: [Cessions, cession_points]
-        }).addTo(map);
-
+        
         var overlayMaps = {
             "Cessions" : CessionGroup,
             "Points": CessionPoints
