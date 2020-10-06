@@ -470,3 +470,9 @@ var points = {
 { "type": "Feature", "properties": { "Royce_Num": 1000 }, "geometry": { "type": "Point", "coordinates": [ -92.476634701616334, 30.220580757306106 ] } }
 ]
 }
+var myStyle = {
+            "color": "#ff5733",
+            "weight": 5,
+            "opacity": 0.65
+        };
+        
