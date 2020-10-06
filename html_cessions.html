@@ -26,7 +26,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        L.geoJSON(cessions).addTo(map);
+        var Cessions = L.geoJSON(cessions).addTo(map);
 
         var myStyle = {
             "color": "#ff7800",
@@ -34,13 +34,12 @@
             "opacity": 0.65
         };
 
-        var cession_points = L.geoJSON([points], {
+        var cession_points = L.geoJSON(points, {
             color: '#ff5733',
             weight: 5,
             opacity: 0.65
         }).addTo(map);
         
-        var marker = L.marker([-83.451072303695156, 43.81024522982586]).addTo(map);
     </script>
 </body>
 
