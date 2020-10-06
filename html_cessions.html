@@ -22,6 +22,9 @@
     <script>
         var map = L.map('mapid').setView([35.00, -80.00], 4);
         
+        var CessionGroup = L.layerGroup();
+        var CessionPoints = L.layerGroup();
+
         var myStyle = {
             "color": "#ff5733",
             "weight": 5,
@@ -30,7 +33,7 @@
         
         var Cessions = L.geoJSON(cessions, {
             style: myStyle
-        })
+        }).addTo(CessionGroup);
 
         var PtStyle = {
             "color": "#ff5733",
@@ -40,7 +43,7 @@
 
         var cession_points = L.geoJSON(points, {
             style: PtStyle
-        })
+        }).addto(CessionPoints);
         
         var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -48,19 +51,14 @@
             layers: [Cessions, cession_points]
         }).addTo(map);
 
-
-        
-        var CessionGroup = L.layerGroup([Cessions]);
-        var CessionPoints = L.layerGroup([cession_points]);
-        
-
         var overlayMaps = {
             "Cessions" : CessionGroup,
             "Points": CessionPoints
         };
 
 
-        L.control.layers(baseMaps, overlayMaps).addTo(map);
+        L.control.layers(overlayMaps).addTo(map);
+
     </script>
 </body>
 
