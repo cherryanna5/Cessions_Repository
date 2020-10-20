@@ -12,6 +12,7 @@
     <script src='Cession.json'></script>
     <script src='points.geojson'></script>
     <script src='Cessions/Cessions.geojson'></script>
+    <script> src = 'C:/Users/12522/Documents/GISc/GEOG 591/Group Project/HTML/Cessions_Repository/States/NumberPerState.geojson'</script>
 
 
 </head>
@@ -20,7 +21,7 @@
     <h1> United States Land Cessions </h1>
     <div id="mapid"></div>
     <script>
-        var map = L.map('mapid').setView([35.00, -80.00], 4);
+        var map = L.map('mapid').setView([37.8, -96], 4);
         var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -59,6 +60,30 @@
             }
         }).addTo(map);
 
+        function getColor(d) {
+            return d > 1000 ? '#800026' :
+                d > 500 ? '#BD0026' :
+                    d > 200 ? '#E31A1C' :
+                        d > 100 ? '#FC4E2A' :
+                            d > 50 ? '#FD8D3C' :
+                                d > 20 ? '#FEB24C' :
+                                    d > 10 ? '#FED976' :
+                                        '#FFEDA0';
+        }
+
+        function style(feature) {
+            return {
+                fillColor: getColor(feature.properties.density),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+
+        L.geoJson(states, { style: style }).addTo(map);
+
 
         function onEachFeature(feature, layer) {
             var popupcontent = "This is a Cession Parcel from the Morriel Act";
@@ -70,9 +95,9 @@
         }
 
         L.geoJson(points, {
-            style: function(feature) {
-            return feature.properties && feature.properties.style;
-        },
+            style: function (feature) {
+                return feature.properties && feature.properties.style;
+            },
 
             onEachFeature: onEachFeature,
 
@@ -101,6 +126,14 @@
                 layer.bringToFront();
             }
         }
+
+        function resetHighlight(e) {
+            geojson.resetStyle(e.target);
+        }
+        
+        var geojson;
+        // ... our listeners
+        geojson = L.geoJson(...);
 
 
 
