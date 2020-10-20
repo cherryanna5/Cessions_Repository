@@ -94,6 +94,14 @@
 
         info.addTo(map);
 
+        function highlightFeature(e) {
+            info.update(layer.feature.properties);
+        }
+
+        function resetHighlight(e) {
+            info.update();
+        }
+
         function style(feature) {
             return {
                 fillColor: '#a6bddb',
@@ -125,10 +133,10 @@
         }
 
         var geojson;
-        
+
         function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());
-}
+            map.fitBounds(e.target.getBounds());
+        }
 
         function onEachFeature(feature, layer) {
             layer.on({
@@ -147,7 +155,7 @@
 
         legend.addTo(map);
 
-        
+
         var PtStyle = {
             "color": "#ff5733",
             "weight": 1,
