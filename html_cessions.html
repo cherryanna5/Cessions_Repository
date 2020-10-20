@@ -76,46 +76,6 @@
             style: myStyle
         }).addTo(map);
 
-        var PtStyle = {
-            "color": "#ff5733",
-            "weight": 1,
-            "opacity": 0.65
-        };
-        var geojsonMarkerOptions = {
-            radius: 2,
-            fillColor: "#687393",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-
-        L.geoJson(points, {
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions);
-            }
-        }).addTo(map);
-
-
-        L.geoJson(points, {
-            style: function (feature) {
-                return feature.properties && feature.properties.style;
-            },
-
-            onEachFeature: onEachFeature,
-
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, {
-                    radius: 2,
-                    fillColor: "#ff7800",
-                    weight: 1,
-                    opacity: 0.85,
-                    fillOpacity: 0.85
-                });
-            }
-        }).addTo(map);
-
-
 
         var info = L.control();
 
@@ -136,11 +96,10 @@
 
         function style(feature) {
             return {
-                fillColor: '#edf8b1',
+                fillColor: '#a6bddb',
                 weight: 2,
                 opacity: 1,
-                color: 'white',
-                dashArray: '3',
+                color: '#1c9099',
                 fillOpacity: 0.7
             };
         }
@@ -199,6 +158,47 @@
         };
 
         legend.addTo(map);
+
+        
+        var PtStyle = {
+            "color": "#ff5733",
+            "weight": 1,
+            "opacity": 0.65
+        };
+        var geojsonMarkerOptions = {
+            radius: 2,
+            fillColor: "#687393",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+        L.geoJson(points, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions);
+            }
+        }).addTo(map);
+
+
+        L.geoJson(points, {
+            style: function (feature) {
+                return feature.properties && feature.properties.style;
+            },
+
+            onEachFeature: onEachFeature,
+
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 2,
+                    fillColor: "#ff7800",
+                    weight: 1,
+                    opacity: 0.85,
+                    fillOpacity: 0.85
+                });
+            }
+        }).addTo(map);
+
 
     </script>
 
