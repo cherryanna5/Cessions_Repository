@@ -85,3 +85,12 @@ L.geoJson(points, {
     }
 }).addTo(map);
 
+
+
+function highlightFeature(e) {
+    info.update(layer.feature.properties);
+}
+
+function resetHighlight(e) {
+    info.update();
+}
