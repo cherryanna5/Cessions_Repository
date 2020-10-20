@@ -128,9 +128,6 @@
             }
         }
 
-        function resetHighlight(e) {
-            geojson.resetStyle(e.target);
-        }
 
         var geojson;
 
@@ -145,6 +142,10 @@
                 click: zoomToFeature
             });
         }
+        geojson = L.geoJson(cessions, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
 
 
 

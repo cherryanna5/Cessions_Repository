@@ -39,9 +39,10 @@ legend.onAdd = function (map) {
 };
 
 
-geojson = L.geoJson(cessions, {
-    style: style,
-    onEachFeature: onEachFeature
-}).addTo(map);
 
 var legend = L.control({ position: 'bottomright' }).addTo(map);
+
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+}
