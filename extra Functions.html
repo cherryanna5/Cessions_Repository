@@ -1,0 +1,22 @@
+function style(feature) {
+return {
+fillColor: "blue",
+weight: 2,
+opacity: 1,
+color: 'white',
+dashArray: '3',
+fillOpacity: 0.7
+};
+}
+
+L.geoJson(cessions, { style: style }).addTo(map);
+
+function style(feature) {
+return {
+fillColor: "blue",
+weight: 2,
+opacity: 1,
+color: 'white',
+fillOpacity: 0.7
+};
+}
