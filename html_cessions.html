@@ -86,9 +86,9 @@
         };
 
         // method that we will use to update the control based on feature properties passed
-        info.update = function (props) {
-            this._div.innerHTML = '<h4>US Cessions</h4>' + (props ?
-                '<b>' + props.Royce_Num + '</b><br />' + props.Cessions_Total_Acres + ' acres / mi<sup>2</sup>'
+        info.update = function (properties) {
+            this._div.innerHTML = '<h4>US Cessions</h4>' + (properties ?
+                '<b>' + properties.Royce_Num + '</b><br />' + properties.Cessions_Total_Acres + ' acres / mi<sup>2</sup>'
                 : 'Hover over a cession');
         };
 
