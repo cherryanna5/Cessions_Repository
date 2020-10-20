@@ -101,7 +101,7 @@
         // L.control.layers(overlayMaps).addTo(map);
 
     </script>
-    <script type="text/javascript" src="Cessions.geojson"></script>
+    
     <script type="text/javascript">
 
         var info = L.control();
@@ -122,7 +122,7 @@
         info.addTo(map);
         function style(feature) {
             return {
-                fillColor: getColor(feature.properties.density),
+                fillColor: "blue",
                 weight: 2,
                 opacity: 1,
                 color: 'white',
@@ -135,7 +135,7 @@
 
         function style(feature) {
             return {
-                fillColor: getColor(feature.properties.density),
+                fillColor: "blue",
                 weight: 2,
                 opacity: 1,
                 color: 'white',
