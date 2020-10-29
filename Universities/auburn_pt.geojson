@@ -1,0 +1,8 @@
+var auburn_pt = {
+"type": "FeatureCollection",
+"name": "auburn_pt",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 2, "Uni_Name": "Auburn University", "Lat": 32.602079, "Long_": -85.4849492 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -85.4849492, 32.602079 ] ] } }
+]
+}

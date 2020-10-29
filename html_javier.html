@@ -1,0 +1,214 @@
+<html>
+
+<head>
+    <title>Cessions</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+    <script src='Cession.json'></script>
+ 
+    <script src='Cessions/Cessions.geojson'></script>
+    <script> src = 'C:/Users/12522/Documents/GISc/GEOG 591/Group Project/HTML/Cessions_Repository/States/NumberPerState.geojson'</script>
+    <style>
+        #map {
+            width: 800px;
+            height: 500px;
+        }
+
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+
+        .legend {
+            text-align: left;
+            line-height: 18px;
+            color: #555;
+        }
+
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1> United States Land Cessions </h1>
+    <p>Year</p><p id="daYear">1801</p>
+    <input type="range" id="points" name="year" min="1801" max="1889" oninput="moveSlider(this)" value="1801"> 
+    <div id="mapid"></div>
+    <script>
+        var map = L.map('mapid').setView([37.8, -96], 4);
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            id: 'mapbox/light-v9',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            tileSize: 512,
+            zoomOffset: -1,
+            maxZoom: 19
+        }).addTo(map);
+
+        // var CessionGroup = L.layerGroup();
+        // var CessionPoints = L.layerGroup();
+
+        // var myStyle = {
+        //     "color": "#a2a9bd",
+        //     "weight": 1,
+        //     "opacity": 0.65
+        // };
+
+        // var Cessions = L.geoJSON(cessions, {
+        //     style: myStyle
+        // }).addTo(map);
+
+
+        var info = L.control();
+
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        // method that we will use to update the control based on feature properties passed
+        info.update = function (props) {
+            this._div.innerHTML = '<h4>US Cessions</h4>' + (props ?
+                '<b>' + 'Royce Number: ' + props.Royce_Num + '</b><br />' + props.Cessions_Total_Acres + ' acres ' + '</b><br />' + props.Cessions_US_Acquired_Mode + '</b><br />' + 'State: ' + props.Cessions_Cession_State + '</b><br />' + 'Total Amount US Paid: ' + props.Cessions_Total_US_Paid
+                : 'Hover over a Cession to view Information');
+                
+            };
+
+            info.addTo(map);
+
+
+        function style(feature) {
+            return {
+                fillColor: getColor(parseInt(feature.properties.Cessions_Yr_US_Acquire)),//'#a6bddb',
+                weight: 2,
+                opacity: 1,
+                color: '#1c9099',
+                fillOpacity: 0.7
+            };
+        }
+        function highlightFeature(e) {
+            var layer = e.target;
+
+            layer.setStyle({
+                weight: 5,
+                color: '#f6eff7',
+                dashArray: '',
+                fillOpacity: 0.7
+            });
+
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
+
+
+            info.update(layer.feature.properties);
+        }
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    info.update();
+}
+
+function zoomToFeature(e) {
+            map.fitBounds(e.target.getBounds());
+        }
+
+
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: zoomToFeature
+            });
+        }
+        geojson = L.geoJson(cessions, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
+ 
+//cessions.features[1].properties.Cessions_Yr_US_Acquire
+
+var daMarker = L.marker([40,-75]).addTo(map);
+    daMarker.on('click', Annafunction);
+function Annafunction(e) {
+    
+    if(map.hasLayer(geojson)){map.removeLayer(geojson)}
+    else {geojson.addTo(map)}
+    };
+
+var lowerValue = 1801;
+
+function moveSlider(slider){
+    var value = slider.value;
+    document.getElementById("daYear").innerHTML = value;
+    lowerValue = value;
+    geojson.resetStyle()
+}
+
+
+
+// function daColor(){var aColor = "#FF0000";
+//         geojson.resetStyle()    
+
+//         }
+
+function getColor(d) {
+    return d < lowerValue ? '#00FF00' :
+           d < 1900  ? '#FF00FF' :
+                      '00FFFF';
+}
+
+
+// var array = []; 
+// for (i = 0; i < cessions.features.length; i++) {array[i] = parseInt(cessions.features[i].properties.Cessions_Yr_US_Acquire)}
+
+
+// const forLoopMinMax = () => {
+//   let min = array[0], max = array[0]
+
+//   for (let i = 1; i < array.length; i++) {
+//     let value = array[i]
+//     min = (value < min) ? value : min
+//     max = (value > max) ? value : max
+//   }
+
+//   return [min, max]
+// }
+
+
+// const [forLoopMin, forLoopMax] = forLoopMinMax()
+// console.log(`Minimum: ${forLoopMin}, Maximum: ${forLoopMax}`) // Minimum: -37, Maximum: 37
+
+
+
+
+    
+    </script>
+
+
+</body>
+
+</html>

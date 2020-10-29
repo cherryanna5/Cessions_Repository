@@ -10,9 +10,21 @@
         integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
         crossorigin=""></script>
     <script src='Cession.json'></script>
- 
+
     <script src='Cessions/Cessions.geojson'></script>
-    <script> src = 'C:/Users/12522/Documents/GISc/GEOG 591/Group Project/HTML/Cessions_Repository/States/NumberPerState.geojson'</script>
+    <script
+        src='C:/Users/12522/Documents/GISc/GEOG 591/Group Project/HTML/Cessions_Repository/States/NumberPerState.geojson'></script>
+    <script
+        src='C:/Users/12522/Documents/GISc/GEOG 591/Group Project/HTML/Cessions_Repository/Cessions/universitypoints.geojson'></script>
+    <script
+        src='C:\Users\12522\Documents\GISc\GEOG 591\Group Project\HTML\Cessions_Repository\Cessions\Alcorn.geojson'></script>
+    <script
+        src='C:\Users\12522\Documents\GISc\GEOG 591\Group Project\HTML\Cessions_Repository\Cessions\alcorn_pt.geojson'></script>
+    <script
+        src='C:\Users\12522\Documents\GISc\GEOG 591\Group Project\HTML\Cessions_Repository\Universities\auburn.geojson'></script>
+    <script
+        src='C:\Users\12522\Documents\GISc\GEOG 591\Group Project\HTML\Cessions_Repository\Universities\auburn_pt.geojson'></script>
+
     <style>
         #map {
             width: 800px;
@@ -52,16 +64,20 @@
 
 <body>
     <h1> United States Land Cessions </h1>
+
     <div id="mapid"></div>
+
     <script>
-        var map = L.map('mapid').setView([37.8, -96], 4);
+        //var map = L.map('mapid').setView([37.8, -96], 4);
+
         var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             id: 'mapbox/light-v9',
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             tileSize: 512,
             zoomOffset: -1,
             maxZoom: 19
-        }).addTo(map);
+        })
+        //.addTo(map);
 
         // var CessionGroup = L.layerGroup();
         // var CessionPoints = L.layerGroup();
@@ -71,11 +87,70 @@
             "weight": 1,
             "opacity": 0.65
         };
+        var uniStyle = {
+            "color": "#000000",
+            "weight": 3
+        };
+
+        var alcorn_style = {
+            "color": "#46166A",
+            "weight": 1
+        };
+
+        var auburn_style = {
+            "color": "#03244d",
+            "weight": 1
+        };
+
+        var clemson_style = {
+            "color": "#F66733",
+            "weight": 1
+        };
+
+        var colorado_style = {
+            "color": "#000000",
+            "weight": 1
+        };
 
         var Cessions = L.geoJSON(cessions, {
             style: myStyle
-        }).addTo(map);
+        })
 
+
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+        var geojson = L.geoJson(cessions, {
+            style: style,
+            onEachFeature: onEachFeature
+        })
+
+        var geojsonMarkerOptions = {
+            radius: 5,
+            fillColor: "#000000",
+            color: "#000",
+            weight: 1
+        };
+
+        var unis = L.geoJSON(uni, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            },
+            mouseover: onEachFeat,
+            style: uniStyle
+        })
+        //This adds the basic information to the map without adding university data first (layers = addTo(map))
+        var map = L.map('mapid', {
+            center: [37.8, -96],
+            zoom: 4,
+            layers: [OpenStreetMap_Mapnik, geojson, unis]
+        });
+
+        /// Adds the Cession Information in the corner
 
         var info = L.control();
 
@@ -90,15 +165,15 @@
             this._div.innerHTML = '<h4>US Cessions</h4>' + (props ?
                 '<b>' + 'Royce Number: ' + props.Royce_Num + '</b><br />' + props.Cessions_Total_Acres + ' acres ' + '</b><br />' + props.Cessions_US_Acquired_Mode + '</b><br />' + 'State: ' + props.Cessions_Cession_State + '</b><br />' + 'Total Amount US Paid: ' + props.Cessions_Total_US_Paid
                 : 'Hover over a Cession to view Information');
-                
-            };
 
-            info.addTo(map);
+        };
+
+        info.addTo(map);
 
 
         function style(feature) {
             return {
-                fillColor: '#000',
+                fillColor: '#a6bddb',
                 weight: 2,
                 opacity: 1,
                 color: '#1c9099',
@@ -110,7 +185,7 @@
 
             layer.setStyle({
                 weight: 5,
-                color: '#f6eff7',
+                color: '#000',
                 dashArray: '',
                 fillOpacity: 0.7
             });
@@ -123,40 +198,119 @@
             info.update(layer.feature.properties);
         }
 
-var geojson;
+        var geojson;
 
-
-function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-    info.update();
-}
-
-function zoomToFeature(e) {
-            map.fitBounds(e.target.getBounds());
+        function resetHighlight(e) {
+            geojson.resetStyle(e.target);
+            info.update();
         }
 
 
+        // THIS Function will pop up the university name CURRENTLY NOT BEING CALLED
+        function onEachFeat(feature, layer) {
+            var popup = "<p> Land Grant Uni " + feature.Uni_Name + ".</p>";
+            // does this feature have a property named popupContent?
+            if (feature.properties && feature.properties.Uni_Name) {
+                layer.bindPopup(feature.properties.Uni_Name);
+            }
 
-        function onEachFeature(feature, layer) {
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight,
-                click: zoomToFeature
-            });
         }
-        geojson = L.geoJson(cessions, {
-            style: style,
-            onEachFeature: onEachFeature
-        }).addTo(map);
+        function alcorn_uni() {
+            L.geoJSON(alcorn,
+                {
+                    style: alcorn_style
+                })
+        }
+        function remove_alcorn() {
+            geojsonLayer.clearLayers();
+            geojson
+        }
+
+        function onEach(feature, layer) {
+            if (feature.properties.Uni_Name = "Alcorn State University") {
+                layer.on({
+                    click: alcorn_uni
+
+                })
+
+            }
+        }
+
+        // THIS IS FOR THE UNIVERSITY INFORMATION
+
+        var Alcorn =
+            L.geoJSON(alcorn, {
+                style: alcorn_style,
+            })
+
+        var Alcorn_pt = L.geoJSON(alcorn_pt, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            },
+            style: uniStyle,
+        })
+
+        var Alcorn_uni = L.layerGroup([Alcorn, Alcorn_pt]);
+
+        var Auburn =
+            L.geoJSON(auburn,
+                {
+                    style: auburn_style,
+                })
+
+        var Auburn_pt = L.geoJSON(auburn_pt, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            },
+            style: uniStyle,
+        })
+
+        var Auburn_uni = L.layerGroup([Auburn, Auburn_pt]);
+
+        var Clemson =
+            L.geoJSON(clemson,
+                {
+                    style: clemson_style,
+                })
+
+        var Clemson_pt = L.geoJSON(clemson_pt, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            },
+            style: uniStyle,
+        })
+
+        var Clemson_uni = L.layerGroup([Clemson, Clemson_pt]);
+
+        var Colorado =
+            L.geoJSON(colorado,
+                {
+                    style: colorado_style,
+                })
+
+        var Colorado_pt = L.geoJSON(colorado_pt, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            },
+            style: uniStyle,
+        })
+
+        var Colorado_uni = L.layerGroup([Colorado, Colorado_pt]);
 
 
 
 
- 
 
 
 
-       
+
+
+        var Universities = new L.control.layers({
+            'University Points': unis,
+            'Alcorn State University': Alcorn_uni,
+            'Auburn University': Auburn_uni,
+        }, null, { collapsed: true }).addTo(map);
+
 
     </script>
 

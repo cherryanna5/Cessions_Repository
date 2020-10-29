@@ -1,0 +1,7 @@
+var alcorn_pt = {
+"type": "FeatureCollection",
+"name": "alcorn_pt",
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 1, "Uni_Name": "Alcorn State University", "Lat": 31.8771048, "Long_": -91.14122 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -91.14122, 31.877104800000041 ] ] } }
+]
+}
