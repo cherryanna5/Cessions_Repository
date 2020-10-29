@@ -267,35 +267,35 @@
 
         var Auburn_uni = L.layerGroup([Auburn, Auburn_pt]);
 
-        var Clemson =
-            L.geoJSON(clemson,
-                {
-                    style: clemson_style,
-                })
+        // var Clemson =
+        //     L.geoJSON(clemson,
+        //         {
+        //             style: clemson_style,
+        //         })
 
-        var Clemson_pt = L.geoJSON(clemson_pt, {
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions)
-            },
-            style: uniStyle,
-        })
+        // var Clemson_pt = L.geoJSON(clemson_pt, {
+        //     pointToLayer: function (feature, latlng) {
+        //         return L.circleMarker(latlng, geojsonMarkerOptions)
+        //     },
+        //     style: uniStyle,
+        // })
 
-        var Clemson_uni = L.layerGroup([Clemson, Clemson_pt]);
+        // var Clemson_uni = L.layerGroup([Clemson, Clemson_pt]);
 
-        var Colorado =
-            L.geoJSON(colorado,
-                {
-                    style: colorado_style,
-                })
+        // var Colorado =
+        //     L.geoJSON(colorado,
+        //         {
+        //             style: colorado_style,
+        //         })
 
-        var Colorado_pt = L.geoJSON(colorado_pt, {
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions)
-            },
-            style: uniStyle,
-        })
+        // var Colorado_pt = L.geoJSON(colorado_pt, {
+        //     pointToLayer: function (feature, latlng) {
+        //         return L.circleMarker(latlng, geojsonMarkerOptions)
+        //     },
+        //     style: uniStyle,
+        // })
 
-        var Colorado_uni = L.layerGroup([Colorado, Colorado_pt]);
+        // var Colorado_uni = L.layerGroup([Colorado, Colorado_pt]);
 
 
 
@@ -307,7 +307,7 @@
 
         var Universities = new L.control.layers({
             'University Points': unis,
-            'Alcorn State University': Alcorn_uni,
+            'Alcorn State University / Mississippi State University': Alcorn_uni,
             'Auburn University': Auburn_uni,
         }, null, { collapsed: true }).addTo(map);
 
