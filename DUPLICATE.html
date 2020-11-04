@@ -29,8 +29,8 @@
 
     <style>
         #map {
-            width: 900px;
-            height: 600px;
+            width: 800px;
+            height: 500px;
         }
 
         .info {
@@ -67,18 +67,14 @@
 <body>
     <h1> United States Land Cessions </h1>
     <div id="summaryLabel">
-        <p>Hover over a cession or state on the map to get more information.</p>
-        <p>Click on a University Point to add the cessions that benefitted its endowement.</p>
+        <p>Click a cession or state on the map to get more information.</p>
     </div>
-    <!-- <p>Land Grant University</p>
-    <p id="university">Alcorn State University</p>
-    <input type="range" id="points" name="University" min="Alcorn State University" max="West Virginia University"
-        oninput="moveSlider(this)" value="Alcorn State University"> -->
-    <!-- <div id="Dropbox">
+    <div id="Dropbox">
         <p> Select a University below to view the corresponding Cessions.</p>
-    </div> -->
+    </div>
     <!-- <div id="was">
         <div class="left-inner-addon">
+            <i class="fa fa-map-marker" style="left:calc(50% - 250px);"></i>
             <input id="places" type="text" class="form-control" placeholder="Alcorn State University">
             <u1 class="typehead dropdown-menu" role="listbox" style="top: 42px; left: 0px; display:none;">
                 <li class="active">
@@ -156,14 +152,10 @@
                 mouseout: reset
             });
         }
-        function onEachUni(feature, layer) {
+        function onEachCession(feature, layer) {
             layer.on({
-                click: layer.bindPopup(feature.properties.Uni_Name)
-            });
-            // if (feature.properties.Uni_Name == "Alcorn State University") return
-            // layer.on({
-            //     click: highlightAlcorn
-            // })
+                click: uni_color
+            })
         }
 
 
@@ -171,8 +163,11 @@
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, geojsonMarkerOptions)
             },
-            style: uniStyle,
-            onEachFeature: onEachUni
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.Uni_Name)
+            },
+            // onEachFeature: onEachCession,
+            style: uniStyle
         })
         var States = L.geoJson(states, {
             style: states_style,
@@ -182,15 +177,13 @@
             style: style,
             onEachFeature: onEachFeature
         })
-        unis.on('click', GiveCession(uni));
-
         //This adds the basic information to the map without adding university data first (layers = addTo(map))
         var map = new L.map('mapid', {
             center: [37.8, -96],
             zoom: 4,
             layers: [OpenStreetMap_Mapnik, Cessions, unis]
         });
-
+        
 
         // Information for the states
         // THIS IS THE STATE ENDOWMENT INFORMATION
@@ -253,147 +246,130 @@
             st.update();
         }
 
-        /// Adds the Cession Information in the corner
+/// Adds the Cession Information in the corner
 
-        var info = L.control(Cessions);
+var info = L.control(Cessions);
 
-        info.onAdd = function (map) {
-            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-            this.update();
-            return this._div;
-        };
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
 
-        // method that we will use to update the control based on feature properties passed
-        info.update = function (props) {
-            this._div.innerHTML = '<h4>US Cessions</h4>' + (props ?
-                '<b>' + 'Royce Number: ' + props.Royce_Num + '</b><br />' + props.Cessions_Total_Acres + ' acres ' + '</b><br />' + props.Cessions_US_Acquired_Mode + '</b><br />' + 'State: ' + props.Cessions_Cession_State + '</b><br />' + 'Total Amount US Paid: ' + props.Cessions_Total_US_Paid
-                : 'Hover over a Cession to view Information');
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    this._div.innerHTML = '<h4>US Cessions</h4>' + (props ?
+        '<b>' + 'Royce Number: ' + props.Royce_Num + '</b><br />' + props.Cessions_Total_Acres + ' acres ' + '</b><br />' + props.Cessions_US_Acquired_Mode + '</b><br />' + 'State: ' + props.Cessions_Cession_State + '</b><br />' + 'Total Amount US Paid: ' + props.Cessions_Total_US_Paid
+        : 'Hover over a Cession to view Information');
 
-        };
+};
 
-        info.addTo(map);
+info.addTo(map);
 
 
-        function style(feature) {
-            return {
-                fillColor: '#a6bddb',
-                weight: 2,
-                opacity: 1,
-                color: '#1c9099',
-                fillOpacity: 0.7
-            };
+function style(feature) {
+    return {
+        fillColor: '#a6bddb',
+        weight: 2,
+        opacity: 1,
+        color: '#1c9099',
+        fillOpacity: 0.7
+    };
+}
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#000',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+
+
+    info.update(layer.feature.properties);
+}
+function resetHighlight(e) {
+    Cessions.resetStyle(e.target);
+    info.update();
+}
+
+var Uni_Cessions = L.layerGroup([Cessions, unis]);
+
+var Universities = new L.control.layers({
+        'Cessions and Univerisities': Uni_Cessions,
+        // 'Cessions': Cessions,
+        // 'University Points': unis,
+        'State Raised Endowements': States,
+        // 'Alcorn State University / Mississippi State University': Alcorn_uni,
+        // 'Auburn University': Auburn_uni,
+    }, null, { collapsed: true }).addTo(map);
+
+
+// THIS IS FOR THE UNIVERSITY INFORMATION
+        function cession_color(d) {
+            if (cessions.properties.Royce_Num == (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574)) return alcorn_style; else
+                // if (d = "Auburn University") return "#03244d"; else
+                //     if (d = "Clemson University") return "#F66733"; else
+                //         if (d = "Colorado State University") return "#000000"; else
+                return myStyle;
         }
-        function highlightFeature(e) {
-            var layer = e.target;
-
-            layer.setStyle({
-                weight: 5,
-                color: '#000',
-                dashArray: '',
-                fillOpacity: 0.7
-            });
-
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                layer.bringToFront();
-            }
-
-
-            info.update(layer.feature.properties);
+        function cession_style(feature) {
+            if (feature.propertires.Uni_Name == "Alcorn State University")
+                return {
+                    fillColor: cession_color(feature.properties.Uni_Name),
+                    weight: 0.5,
+                    opacity: 1,
+                    color: "black",
+                    fillOpacity: 0.7
+                };
         }
-        function resetHighlight(e) {
-            Cessions.resetStyle(e.target);
-            info.update();
-        }
-
-
-        // THIS IS FOR THE UNIVERSITY INFORMATION
-
-
-        // function AlcornStyle(d) {
-        //     if (d == (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574))
-        //         return '#46166A'; else
-        //         return "#edf8fb"
-        // };
-
-
-        // function highlightAlcorn(cessions) {
-        //     return {
-        //         fillColor: AlcornStyle(feature.properties.Royce_Num),
-        //         weight: 0.5,
-        //         opacity: 1,
-        //         color: "black",
-        //         fillOpacity: 0.7
-        //     };
-        // }
-
-        // function resetU(e) {
-        //     Cessions.resetStyle(e.target);
-
-        // }
-
-
-
-        var Uni_Cessions = L.layerGroup([Cessions, unis]);
-
-        var Universities = new L.control.layers({
-            'Cessions and Univerisities': Uni_Cessions,
-            // 'Cessions': Cessions,
-            // 'University Points': unis,
-            'State Raised Endowements': States,
-            // 'Alcorn State University / Mississippi State University': Alcorn_uni,
-            // 'Auburn University': Auburn_uni,
-        }, null, { collapsed: true }).addTo(map);
-
-
-        // University data
-
-        var Alcorn =
-            L.geoJSON(alcorn, {
-                style: alcorn_style,
+        function uni_color(e) {
+            L.geojson(cessions, {
+                style: cession_style,
+                onEachFeature: onEachFeature
             })
 
-        // var Alcorn_pt = L.geoJSON(alcorn_pt, {
-        //     pointToLayer: function (feature, latlng) {
-        //         return L.circleMarker(latlng, geojsonMarkerOptions)
-        //     },
-        //     style: uniStyle,
-        // }).addTo(map);
-        // Alcorn_pt.on('click', GiveAlcorn);
-        function GiveCession(feature) {
-            if (feature.properties.Uni_Name == ('Alcorn State Univeristy') ){
-                return cessions.Royce_Num = (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574); {layer.setStyle(alcorn_style)}
-            } else { GiveBlank }
-        }
-        function GiveAlcorn(e) {
 
-            if (map.hasLayer(Alcorn)) { map.removeLayer(Alcorn) }
-            else { Alcorn.addTo(map) }
-        };
-        function GiveBlank(e) {
-            Cessions
-        }
-        // var Alcorn_uni = L.layerGroup([Alcorn, Alcorn_pt]);
 
-        var Auburn =
-            L.geoJSON(auburn, {
-                style: auburn_style,
+
+            // University data
+
+            var Alcorn =
+                L.geoJSON(alcorn, {
+                    style: alcorn_style,
+                })
+
+            var Alcorn_pt = L.geoJSON(alcorn_pt, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions)
+                },
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(feature.properties.Uni_Name);
+                },
+                style: uniStyle,
             })
 
-        var Auburn_pt = L.geoJSON(auburn_pt, {
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions)
-            },
-            style: uniStyle,
-            onEachFeature: onEachUni
-        }).addTo(map);
-        Auburn_pt.on('click', GiveAuburn(cessions.properties.Royce_Num));
+            var Alcorn_uni = L.layerGroup([Alcorn, Alcorn_pt]);
 
-        function GiveAuburn(d) {
-            if (d == (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574)) { layer.setStyle(auburn_style) }
-            else { layer.setStyle(myStyle) }
-        };
+            var Auburn =
+                L.geoJSON(auburn,
+                    {
+                        style: auburn_style,
+                    })
 
-        // var Auburn_uni = L.layerGroup([Auburn, Auburn_pt]);
+            var Auburn_pt = L.geoJSON(auburn_pt, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions)
+                },
+                style: uniStyle,
+            })
+
+            var Auburn_uni = L.layerGroup([Auburn, Auburn_pt]);
 
             // var Clemson =
             //     L.geoJSON(clemson,
@@ -427,8 +403,8 @@
 
 
 
-
-
+        }
+           
 
     </script>
 

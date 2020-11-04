@@ -70,10 +70,6 @@
         };
         
 
-        var States = L.geoJSON(states, {
-            style: myStyle
-        }).addTo(map);
-
         function onEachFeature(feature, layer) {
             layer.on({
                 mouseover: highlightFeature,
