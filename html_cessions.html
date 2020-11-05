@@ -13,19 +13,18 @@
 
     <script src='Cessions/Cessions.geojson'></script>
     <script
-        src='C:/Users/12522/Documents/GISc/GEOG 591/Group Project/HTML/Cessions_Repository/States/NumberPerState.geojson'></script>
+        src='../States/NumberPerState.geojson'></script>
     <script
-        src='C:/Users/12522/Documents/GISc/GEOG 591/Group Project/HTML/Cessions_Repository/Cessions/universitypoints.geojson'></script>
+        src='../Cessions/universitypoints.geojson'></script>
     <script
-        src='C:\Users\12522\Documents\GISc\GEOG 591\Group Project\HTML\Cessions_Repository\Cessions\Alcorn.geojson'></script>
+        src='../Cessions/Alcorn.geojson'></script>
     <script
-        src='C:\Users\12522\Documents\GISc\GEOG 591\Group Project\HTML\Cessions_Repository\Cessions\alcorn_pt.geojson'></script>
+        src='../Cessions/alcorn_pt.geojson'></script>
     <script
-        src='C:\Users\12522\Documents\GISc\GEOG 591\Group Project\HTML\Cessions_Repository\Universities\auburn.geojson'></script>
+        src='../Cessions_Repository/Universities/auburn.geojson'></script>
     <script
-        src='C:\Users\12522\Documents\GISc\GEOG 591\Group Project\HTML\Cessions_Repository\Universities\auburn_pt.geojson'></script>
-    <script
-        src="C:/Users/12522/Documents/GISc/GEOG 591/Group Project/HTML/Cessions_Repository/States/EndowementRaisedByState.geojson"></script>
+        src='../Cessions_Repository/Universities/auburn_pt.geojson'></script>
+   
 
     <style>
         #map {
@@ -182,7 +181,7 @@
             style: style,
             onEachFeature: onEachFeature
         })
-        unis.on('click', GiveCession(uni));
+        //unis.on('click', GiveCession(uni));
 
         //This adds the basic information to the map without adding university data first (layers = addTo(map))
         var map = new L.map('mapid', {
@@ -352,13 +351,14 @@
                 style: alcorn_style,
             })
 
-        // var Alcorn_pt = L.geoJSON(alcorn_pt, {
-        //     pointToLayer: function (feature, latlng) {
-        //         return L.circleMarker(latlng, geojsonMarkerOptions)
-        //     },
-        //     style: uniStyle,
-        // }).addTo(map);
-        // Alcorn_pt.on('click', GiveAlcorn);
+        var Alcorn_pt = L.geoJSON(alcorn_pt, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            },
+            style: uniStyle,
+        }).addTo(map);
+        Alcorn_pt.on('click', GiveAlcorn);
+
         function GiveCession(feature) {
             if (feature.properties.Uni_Name == ('Alcorn State Univeristy') ){
                 return cessions.Royce_Num = (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574); {layer.setStyle(alcorn_style)}
