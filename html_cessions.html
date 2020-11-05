@@ -24,7 +24,7 @@
         src='../Cessions_Repository/Universities/auburn.geojson'></script>
     <script
         src='../Cessions_Repository/Universities/auburn_pt.geojson'></script>
-   
+   <script src='../Cessions_Repository/Uni_RoyceNum.geojson'></script>
 
     <style>
         #map {
@@ -360,8 +360,8 @@
         Alcorn_pt.on('click', GiveAlcorn);
 
         function GiveCession(feature) {
-            if (feature.properties.Uni_Name == ('Alcorn State Univeristy') ){
-                return cessions.Royce_Num = (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574); {layer.setStyle(alcorn_style)}
+            if (feature.properties.Uni_Name == ('Alcorn State Univeristy') && (join.properties.Uni_Name == ('Alcorn State Univeristy')) ){
+                return GiveAlcorn
             } else { GiveBlank }
         }
         function GiveAlcorn(e) {
