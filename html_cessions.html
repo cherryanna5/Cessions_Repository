@@ -56,10 +56,10 @@
 </head>
 
 <body>
-    <h1> United States Land Cessions </h1>
+    <h1> United States Morrill Act Land Cessions and Land Grant Universities </h1>
     <div id="summaryLabel">
-        <p>Hover over a cession or state on the map to get more information.</p>
-        <p>Click on a University Point to add the cessions that benefitted its endowement.</p>
+        <p>Select the data from the legend and then hover over a cession or state on the map to get more information.</p>
+        <p>Click on a Land Grant University point to add the name.</p>
     </div>
     <!-- <p>Land Grant University</p>
     <p id="university">Alcorn State University</p>
@@ -157,7 +157,7 @@
             // })
         }
 
-
+        var States_plain = L.geoJSON(states);
         var unis = L.geoJSON(uni, {
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, geojsonMarkerOptions)
@@ -322,18 +322,18 @@
 
         // }
 
-
-
-        var Uni_Cessions = L.layerGroup([Cessions, unis]);
+       
+        var States_Uni = L.layerGroup([unis, States_plain]);
+        var Uni_Cessions = L.layerGroup([unis, Cessions]);
 
         var Universities = new L.control.layers({
-            'Cessions and Univerisities': Uni_Cessions,
-            // 'Cessions': Cessions,
-            // 'University Points': unis,
+            'Cessions and Universities': Uni_Cessions,
+            'States and Universities': States_Uni,
+            //'University Points': unis,
             'State Raised Endowements': States,
             // 'Alcorn State University / Mississippi State University': Alcorn_uni,
             // 'Auburn University': Auburn_uni,
-        }, null, { collapsed: true }).addTo(map);
+        }, null, { collapsed: false }).addTo(map);
 
 
         // University data
@@ -417,13 +417,13 @@
 
             // var Colorado_uni = L.layerGroup([Colorado, Colorado_pt]);
 
-
-
-
-
-
     </script>
 
+<div id="Information">
+    <p>In 1862, President Abraham Lincoln signed the Morrill Act, which distributed public domain lands that were also tribal lands to raise funds for 52 colleges across the nation. </p>
+    <p>Robert Lee, “Morrill Act of 1862 Indigenous Land Parcels Database,” High Country News, March 2020.</p>
+    <p>Author: Anna Cherry  cherry5@live.unc.edu </p>
+    </div>
 </body>
 
 </html>
