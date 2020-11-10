@@ -340,52 +340,52 @@
 
         // University data
 
-        var Alcorn =
-            L.geoJSON(alcorn, {
-                style: alcorn_style,
-            })
+        // var Alcorn =
+        //     L.geoJSON(alcorn, {
+        //         style: alcorn_style,
+        //     })
 
-        var Alcorn_pt = L.geoJSON(alcorn_pt, {
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions)
-            },
-            style: uniStyle,
-        }).addTo(map);
-        Alcorn_pt.on('click', GiveAlcorn);
+        // var Alcorn_pt = L.geoJSON(alcorn_pt, {
+        //     pointToLayer: function (feature, latlng) {
+        //         return L.circleMarker(latlng, geojsonMarkerOptions)
+        //     },
+        //     style: uniStyle,
+        // }).addTo(map);
+        // Alcorn_pt.on('click', GiveAlcorn);
 
-        function GiveCession(feature) {
-            if (feature.properties.Uni_Name == ('Alcorn State Univeristy') && (join.properties.Uni_Name == ('Alcorn State Univeristy')) ){
-                return GiveAlcorn
-            } else { GiveBlank }
-        }
-        function GiveAlcorn(e) {
+        // function GiveCession(feature) {
+        //     if (feature.properties.Uni_Name == ('Alcorn State Univeristy') && (join.properties.Uni_Name == ('Alcorn State Univeristy')) ){
+        //         return GiveAlcorn
+        //     } else { GiveBlank }
+        // }
+        // function GiveAlcorn(e) {
 
-            if (map.hasLayer(Alcorn)) { map.removeLayer(Alcorn) }
-            else { Alcorn.addTo(map) }
-        };
-        function GiveBlank(e) {
-            Cessions
-        }
+        //     if (map.hasLayer(Alcorn)) { map.removeLayer(Alcorn) }
+        //     else { Alcorn.addTo(map) }
+        // };
+        // function GiveBlank(e) {
+        //     Cessions
+        // }
         // var Alcorn_uni = L.layerGroup([Alcorn, Alcorn_pt]);
 
-        var Auburn =
-            L.geoJSON(auburn, {
-                style: auburn_style,
-            })
+        // var Auburn =
+        //     L.geoJSON(auburn, {
+        //         style: auburn_style,
+        //     })
 
-        var Auburn_pt = L.geoJSON(auburn_pt, {
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions)
-            },
-            style: uniStyle,
-            onEachFeature: onEachUni
-        }).addTo(map);
-        Auburn_pt.on('click', GiveAuburn(cessions.properties.Royce_Num));
+        // var Auburn_pt = L.geoJSON(auburn_pt, {
+        //     pointToLayer: function (feature, latlng) {
+        //         return L.circleMarker(latlng, geojsonMarkerOptions)
+        //     },
+        //     style: uniStyle,
+        //     onEachFeature: onEachUni
+        // }).addTo(map);
+        // Auburn_pt.on('click', GiveAuburn(cessions.properties.Royce_Num));
 
-        function GiveAuburn(d) {
-            if (d == (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574)) { layer.setStyle(auburn_style) }
-            else { layer.setStyle(myStyle) }
-        };
+        // function GiveAuburn(d) {
+        //     if (d == (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574)) { layer.setStyle(auburn_style) }
+        //     else { layer.setStyle(myStyle) }
+        // };
 
         // var Auburn_uni = L.layerGroup([Auburn, Auburn_pt]);
 
