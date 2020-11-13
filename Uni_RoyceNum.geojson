@@ -25,7 +25,6 @@ var join = {
 { "type": "Feature", "properties": { "Royce_Num": "281", "Uni_Name": "Alcorn State University" }, "geometry": null },
 { "type": "Feature", "properties": { "Royce_Num": "458", "Uni_Name": "Alcorn State University" }, "geometry": null },
 { "type": "Feature", "properties": { "Royce_Num": "242", "Uni_Name": "Alcorn State University" }, "geometry": null },
-{ "type": "Feature", "properties": { "Royce_Num": "None_ND", "Uni_Name": "Alcorn State University" }, "geometry": null },
 { "type": "Feature", "properties": { "Royce_Num": "357", "Uni_Name": "Alcorn State University" }, "geometry": null },
 { "type": "Feature", "properties": { "Royce_Num": "261", "Uni_Name": "Alcorn State University" }, "geometry": null },
 { "type": "Feature", "properties": { "Royce_Num": "332", "Uni_Name": "Alcorn State University" }, "geometry": null },

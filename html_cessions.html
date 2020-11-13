@@ -18,7 +18,8 @@
     <script src="../Cessions_Repository/Universities/auburn_pt.geojson"></script> -->
    <script src="../Cessions_Repository/Uni_RoyceNum.geojson"></script>
 <script src = "../Cessions_Repository/States/EndowementRaisedByState.geojson"></script>
-<!-- <script src = "../Cessions_Repository/Universities/"></script> -->
+<script src = "../Cessions_Repository/RoyceNum.json"></script>
+<script src = "../Cessions_Repository/name.json"></script>
     <style>
         #map {
             width: 900px;
@@ -285,9 +286,9 @@
                 fillOpacity: 0.7
             });
 
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                layer.bringToFront();
-            }
+            // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            //     layer.bringToFront();
+            // }
 
 
             info.update(layer.feature.properties);
@@ -353,10 +354,10 @@
         // Alcorn_pt.on('click', GiveAlcorn);
 
         // function GiveCession(feature) {
-        //     if (feature.properties.Uni_Name == ('Alcorn State Univeristy') && (join.properties.Uni_Name == ('Alcorn State Univeristy')) ){
+        //     if (uni.feature.properties.Uni_Name) ){
         //         return GiveAlcorn
         //     } else { GiveBlank }
-        // }
+        //}
         // function GiveAlcorn(e) {
 
         //     if (map.hasLayer(Alcorn)) { map.removeLayer(Alcorn) }
