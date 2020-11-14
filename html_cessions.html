@@ -78,7 +78,7 @@
         })
         var geojsonMarkerOptions = {
             radius: 5,
-            fillColor: "#000000",
+            fillColor: uni_style,
             color: "#000",
             weight: 1
         };
@@ -87,9 +87,9 @@
             "weight": 1,
             "opacity": 0.65
         };
-        var uniStyle = {
-            "color": "#000000",
-            "weight": 3
+        var plain_style = {
+            "color": "#bdbdbd",
+            "weight": 2
         };
 
         function onEachFeature(feature, layer) {
@@ -106,210 +106,246 @@
         }
         function onEachUni(feature, layer) {
             layer.on({
-                click: test//layer.bindPopup(feature.properties.Uni_Name) 
+                click: test
             });
         }
-        var daArray = [];
-  
+        function onEachUNI(feature, layer) {
+            layer.on({
+                click: layer.bindPopup(feature.properties.Uni_Name) 
+            });
+        }
+        var daRoyce = {
+            daArray: [],
+            daColor: '#fff000'
+        }
+        var Royce = {
+            Array: [],
+            Color: '#fff000'
+        }
+
+
+        var States_plain = L.geoJSON(states, {
+            style: plain_style
+        });
+        var Cessions = L.geoJson(cessions, {
+            style: style,
+            onEachFeature: onEachFeature
+        })
+        var unis = L.geoJSON(uni, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            },
+            style: uni_style,
+            onEachFeature: onEachUni
+        })
+        var univeristy_plain = L.geoJSON(uni, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            },
+            style: uni_style,
+            onEachFeature: onEachUNI
+        })
+        var States = L.geoJson(states, {
+            style: states_style,
+            onEachFeature: onEachState
+        })
+
+
+        //This adds the basic information to the map without adding university data first (layers = addTo(map))
+        var map = new L.map('mapid', {
+            center: [37.8, -96],
+            zoom: 4,
+            layers: [OpenStreetMap_Mapnik, Cessions, unis]
+        });
+
+        // Cession Colors
         function test(e) {
             console.log(e.target.feature.properties.Uni_Name)
-            daArray = [];
+            daRoyce.daColor = e.target.feature.properties.Color
+            daRoyce.daArray = [];
             for (i = 0; i < join.features.length; i++) {
-                if (e.target.feature.properties.Uni_Name == join.features[i].properties.Uni_Name) { daArray.push(join.features[i].properties.Royce_Num) }
+                if (e.target.feature.properties.Uni_Name == join.features[i].properties.Uni_Name) { daRoyce.daArray.push(join.features[i].properties.Royce_Num) }
             }
-            return daArray;
+            Cessions.resetStyle()
+            return daRoyce;
         }
         function getColor(d) {
-            if (daArray.includes(String(d)) == true) { return uni.feature.properties.Color }
+            if (daRoyce.daArray.includes(String(d)) == true) { return daRoyce.daColor }
+            else { return '#bdbdbd' }
         }
-        function Color(feature) {
+        function style(feature) {
             return {
                 fillColor: getColor(feature.properties.Royce_Num),
-                weight: 2,
+                weight: 1,
                 opacity: 1,
-                color: '#1c9099',
+                color: getColor(feature.properties.Royce_Num),
+                fillOpacity: 0.5
+            }
+        }
+        function uni_color(d) {
+            feature.properties.Color
+        }
+        function uni_style(feature) {
+            return {
+                fillColor: feature.properties.Color,
+                weight: 0.5,
+                opacity: 1,
+                color: "black",
                 fillOpacity: 0.7
             };
-        Cessions.resetStyle()
-        return daArray;
-   
         }
-            var States_plain = L.geoJSON(states);
-            var unis = L.geoJSON(uni, {
-                pointToLayer: function (feature, latlng) {
-                    return L.circleMarker(latlng, geojsonMarkerOptions)
-                },
-                style: uniStyle,
-                onEachFeature: onEachUni
-            })
-            var States = L.geoJson(states, {
-                style: states_style,
-                onEachFeature: onEachState
-            })
-            var Cessions = L.geoJson(cessions, {
-                style: style,
-                onEachFeature: onEachFeature
-            })
-      
-            //This adds the basic information to the map without adding university data first (layers = addTo(map))
-            var map = new L.map('mapid', {
-                center: [37.8, -96],
-                zoom: 4,
-                layers: [OpenStreetMap_Mapnik, Cessions, unis]
+
+        // Information for the states
+        // THIS IS THE STATE ENDOWMENT INFORMATION
+
+        var st = L.control(States);
+
+        st.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        st.update = function (props) {
+            this._div.innerHTML = '<h4> Land Grant University - Adjusted Endowements Raised per State as of 1914 </h4>' + (props ?
+                '<b>' + 'State: ' + props.NAME + '</b><br />' + ' Endowement:  $' + props.State_Su_4
+                : 'Hover over a State to view Information');
+
+        };
+
+        st.addTo(map);
+
+        function states_color(d) {
+            if (d > 3000000) return "#006d2c"; else
+                if (d > 2000000) return "#2ca25f"; else
+                    if (d > 1000000) return "#66c2a4"; else
+                        if (d > 579) return "#b2e2e2"; else
+                            return "#edf8fb";
+        }
+        function states_style(feature) {
+            return {
+                fillColor: states_color(feature.properties.State_Su_4),
+                weight: 0.5,
+                opacity: 1,
+                color: "black",
+                fillOpacity: 0.7
+            };
+        }
+
+        function highlight(e) {
+            var layer = e.target;
+
+            layer.setStyle({
+                fillColor: '#636363',
+                weight: 5,
+                color: '#636363',
+                dashArray: '',
+                fillOpacity: 0.7
             });
 
-
-            // Information for the states
-            // THIS IS THE STATE ENDOWMENT INFORMATION
-
-            var st = L.control(States);
-
-            st.onAdd = function (map) {
-                this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-                this.update();
-                return this._div;
-            };
-
-            st.update = function (props) {
-                this._div.innerHTML = '<h4> Land Grant University - Adjusted Endowements Raised per State as of 1914 </h4>' + (props ?
-                    '<b>' + 'State: ' + props.NAME + '</b><br />' + ' Endowement:  $' + props.State_Su_4
-                    : 'Hover over a State to view Information');
-
-            };
-
-            st.addTo(map);
-
-            function states_color(d) {
-                if (d > 3000000) return "#006d2c"; else
-                    if (d > 2000000) return "#2ca25f"; else
-                        if (d > 1000000) return "#66c2a4"; else
-                            if (d > 579) return "#b2e2e2"; else
-                                return "#edf8fb";
-            }
-            function states_style(feature) {
-                return {
-                    fillColor: states_color(feature.properties.State_Su_4),
-                    weight: 0.5,
-                    opacity: 1,
-                    color: "black",
-                    fillOpacity: 0.7
-                };
-            }
-
-            function highlight(e) {
-                var layer = e.target;
-
-                layer.setStyle({
-                    fillColor: '#636363',
-                    weight: 5,
-                    color: '#636363',
-                    dashArray: '',
-                    fillOpacity: 0.7
-                });
-
-                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                    layer.bringToFront();
-                }
-
-
-                st.update(layer.feature.properties);
-            }
-
-            function reset(e) {
-                States.resetStyle(e.target);
-                st.update();
-            }
-
-            /// Adds the Cession Information in the corner
-
-            var info = L.control(Cessions);
-
-            info.onAdd = function (map) {
-                this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-                this.update();
-                return this._div;
-            };
-
-            // method that we will use to update the control based on feature properties passed
-            info.update = function (props) {
-                this._div.innerHTML = '<h4>US Cessions</h4>' + (props ?
-                    '<b>' + 'Royce Number: ' + props.Royce_Num + '</b><br />' + props.Cessions_Total_Acres + ' acres ' + '</b><br />' + props.Cessions_US_Acquired_Mode + '</b><br />' + 'State: ' + props.Cessions_Cession_State + '</b><br />' + 'Total Amount US Paid: ' + props.Cessions_Total_US_Paid
-                    : 'Hover over a Cession to view Information');
-
-            };
-
-            info.addTo(map);
-
-
-            function style(feature) {
-                return {
-                    fillColor: '#a6bddb',
-                    weight: 2,
-                    opacity: 1,
-                    color: '#1c9099',
-                    fillOpacity: 0.7
-                };
-            }
-            function highlightFeature(e) {
-                var layer = e.target;
-
-                layer.setStyle({
-                    weight: 5,
-                    color: '#000',
-                    dashArray: '',
-                    fillOpacity: 0.7
-                });
-
-                // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                //     layer.bringToFront();
-                // }
-
-
-                info.update(layer.feature.properties);
-            }
-            function resetHighlight(e) {
-                Cessions.resetStyle(e.target);
-                info.update();
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
             }
 
 
-            // THIS IS FOR THE UNIVERSITY INFORMATION
+            st.update(layer.feature.properties);
+        }
+
+        function reset(e) {
+            States.resetStyle(e.target);
+            st.update();
+        }
+
+        /// Adds the Cession Information in the corner
+
+        var info = L.control(Cessions);
+
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        // method that we will use to update the control based on feature properties passed
+        info.update = function (props) {
+            this._div.innerHTML = '<h4>US Cessions</h4>' + (props ?
+                '<b>' + 'Royce Number: ' + props.Royce_Num + '</b><br />' + props.Cessions_Total_Acres + ' acres ' + '</b><br />' + props.Cessions_US_Acquired_Mode + '</b><br />' + 'State: ' + props.Cessions_Cession_State + '</b><br />' + 'Total Amount US Paid: ' + props.Cessions_Total_US_Paid
+                : 'Hover over a Cession to view Information');
+
+        };
+
+        info.addTo(map);
 
 
-            // function AlcornStyle(d) {
-            //     if (d == (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574))
-            //         return '#46166A'; else
-            //         return "#edf8fb"
-            // };
+        // function style(feature) {
+        //     return {
+        //         fillColor: '#a6bddb',
+        //         weight: 2,
+        //         opacity: 1,
+        //         color: '#1c9099',
+        //         fillOpacity: 0.7
+        //     };
+        // }
+        function highlightFeature(e) {
+            var layer = e.target;
 
+            layer.setStyle({
+                weight: 5,
+                color: '#000',
+                dashArray: '',
+                fillOpacity: 0.7
+            });
 
-            // function highlightAlcorn(cessions) {
-            //     return {
-            //         fillColor: AlcornStyle(feature.properties.Royce_Num),
-            //         weight: 0.5,
-            //         opacity: 1,
-            //         color: "black",
-            //         fillOpacity: 0.7
-            //     };
-            // }
-
-            // function resetU(e) {
-            //     Cessions.resetStyle(e.target);
-
+            // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            //     layer.bringToFront();
             // }
 
 
-            var States_Uni = L.layerGroup([unis, States_plain]);
-            var Uni_Cessions = L.layerGroup([unis, Cessions]);
+            info.update(layer.feature.properties);
+        }
+        function resetHighlight(e) {
+            Cessions.resetStyle(e.target);
+            info.update();
+        }
 
-            var Universities = new L.control.layers({
-                'Cessions and Universities': Uni_Cessions,
-                'States and Universities': States_Uni,
-                //'University Points': unis,
-                'State Raised Endowements': States,
-                // 'Alcorn State University / Mississippi State University': Alcorn_uni,
-                // 'Auburn University': Auburn_uni,
-            }, null, { collapsed: false }).addTo(map);
+
+        // THIS IS FOR THE UNIVERSITY INFORMATION
+
+
+        // function AlcornStyle(d) {
+        //     if (d == (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574))
+        //         return '#46166A'; else
+        //         return "#edf8fb"
+        // };
+
+
+        // function highlightAlcorn(cessions) {
+        //     return {
+        //         fillColor: AlcornStyle(feature.properties.Royce_Num),
+        //         weight: 0.5,
+        //         opacity: 1,
+        //         color: "black",
+        //         fillOpacity: 0.7
+        //     };
+        // }
+
+        // function resetU(e) {
+        //     Cessions.resetStyle(e.target);
+
+        // }
+
+
+        var States_Uni = L.layerGroup([univeristy_plain, States_plain]);
+        var Uni_Cessions = L.layerGroup([unis, Cessions]);
+
+        var Universities = new L.control.layers({
+            'Cessions and Universities': Uni_Cessions,
+            'States and Universities': States_Uni,
+            //'University Points': unis,
+            'State Raised Endowements': States,
+            // 'Alcorn State University / Mississippi State University': Alcorn_uni,
+            // 'Auburn University': Auburn_uni,
+        }, null, { collapsed: false }).addTo(map);
 
 
         // University data
