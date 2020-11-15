@@ -138,6 +138,10 @@
             style: uni_style,
             onEachFeature: onEachUni
         })
+        var States = L.geoJson(states, {
+            style: states_style,
+            onEachFeature: onEachState
+        })
         var univeristy_plain = L.geoJSON(uni, {
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, geojsonMarkerOptions)
@@ -145,10 +149,7 @@
             style: uni_style,
             onEachFeature: onEachUNI
         })
-        var States = L.geoJson(states, {
-            style: states_style,
-            onEachFeature: onEachState
-        })
+
 
 
         //This adds the basic information to the map without adding university data first (layers = addTo(map))
@@ -243,11 +244,6 @@
                 fillOpacity: 0.7
             });
 
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                layer.bringToFront();
-            }
-
-
             st.update(layer.feature.properties);
         }
 
@@ -309,42 +305,12 @@
         }
 
 
-        // THIS IS FOR THE UNIVERSITY INFORMATION
-
-
-        // function AlcornStyle(d) {
-        //     if (d == (688, 61, 94, 123, 124, 151, 186, 191, 242, 261, 264, 270, 273, 274, 275, 276, 277, 278, 279, 280, 281, 284, 286, 288, 289, 291, 293, 294, 295, 296, 297, 299, 301, 302, 304, 305, 306, 308, 310, 314, 315, 332, 344, 345, 347, 353, 357, 362, 373, 397, 398, 399, 408, 410, 414, 426, 432, 447, 458, 473, 477, 478, 515, 520, 558, 562, 574))
-        //         return '#46166A'; else
-        //         return "#edf8fb"
-        // };
-
-
-        // function highlightAlcorn(cessions) {
-        //     return {
-        //         fillColor: AlcornStyle(feature.properties.Royce_Num),
-        //         weight: 0.5,
-        //         opacity: 1,
-        //         color: "black",
-        //         fillOpacity: 0.7
-        //     };
-        // }
-
-        // function resetU(e) {
-        //     Cessions.resetStyle(e.target);
-
-        // }
-
-
-        var States_Uni = L.layerGroup([univeristy_plain, States_plain]);
+        var States_Uni = L.layerGroup([States, univeristy_plain]);
         var Uni_Cessions = L.layerGroup([unis, Cessions]);
 
         var Universities = new L.control.layers({
             'Cessions and Universities': Uni_Cessions,
-            'States and Universities': States_Uni,
-            //'University Points': unis,
-            'State Raised Endowements': States,
-            // 'Alcorn State University / Mississippi State University': Alcorn_uni,
-            // 'Auburn University': Auburn_uni,
+            'State Raised Endowements and Universities': States_Uni
         }, null, { collapsed: false }).addTo(map);
 
 
